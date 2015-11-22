@@ -1,0 +1,6 @@
+[submodule "Giza"]
+	path = Giza
+	url = https://github.com/Fabien-Chouteau/Giza.git
+[submodule "drivers"]
+	path = drivers
+	url = git://github.com/AdaCore/bareboard.git
