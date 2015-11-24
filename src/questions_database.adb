@@ -4,11 +4,11 @@ with STM32F4.RNG.Polling;
 with Interfaces; use Interfaces;
 
 package body Questions_Database is
-   type Question_Id is mod 15;
+   type Question_Id is mod 20;
 
    procedure Set_New_Question (QW : in out Question_Window) is
       Index : constant Question_Id :=
-        Question_Id (STM32F4.RNG.Polling.Random mod 15);
+        Question_Id (STM32F4.RNG.Polling.Random mod 20);
    begin
       case Index is
       when 0 =>
@@ -131,6 +131,46 @@ package body Questions_Database is
             "Yes",
             "No",
             Answer_C);
+      when 15 =>
+         QW.Set_Question
+           ("Which of the following is not a static analysis tool?",
+            "GNATtest",
+            "GNATcheck",
+            "CodePeer",
+            "GNATprove",
+            Answer_A);
+      when 16 =>
+         QW.Set_Question
+           ("What is GNAT Tracker?",
+            "A pet tagging device",
+            "A laser weapon system",
+            "A spying plugin in GPS",
+            "AdaCore customers' best friend",
+            Answer_D);
+      when 17 =>
+         QW.Set_Question
+           ("Which of the following qualities does not apply to SPARK?",
+            "automatic",
+            "complicated",
+            "integrated",
+            "interactive",
+            Answer_B);
+      when 18 =>
+         QW.Set_Question
+           ("Ada has all of these except",
+            "flavors",
+            "aspects",
+            "attributes",
+            "versions",
+            Answer_A);
+      when 19 =>
+         QW.Set_Question
+           ("Ada 2012 contracts are",
+            "preconditions and postconditions",
+            "type invariants",
+            "type predicates",
+            "all of these",
+            Answer_D);
       end case;
    end Set_New_Question;
 
