@@ -103,5 +103,40 @@
     "C":"Yes",
     "D":"No",
     "Correct_Answer":"C"}
-]
 
+  { "Q":"Which of the following is not a static analysis tool?",
+    "A":"GNATtest",
+    "B":"GNATcheck",
+    "C":"CodePeer",
+    "D":"GNATprove",
+    "Correct_Answer":"A"}
+
+  { "Q":"What is GNAT Tracker?",
+    "A":"A pet tagging device",
+    "B":"A laser weapon system",
+    "C":"A spying plugin in GPS",
+    "D":"AdaCore customers' best friend",
+    "Correct_Answer":"D"}
+
+  { "Q":"Which of the following qualities does not apply to SPARK?",
+    "A":"automatic",
+    "B":"complicated",
+    "C":"integrated",
+    "D":"interactive",
+    "Correct_Answer":"B"}
+
+  { "Q":"Ada has all of these except",
+    "A":"flavors",
+    "B":"aspects",
+    "C":"attributes",
+    "D":"versions",
+    "Correct_Answer":"A"}
+
+  { "Q":"Ada 2012 contracts are",
+    "A":"preconditions and postconditions",
+    "B":"type invariants",
+    "C":"type predicates",
+    "D":"all of these",
+    "Correct_Answer":"D"}
+
+]
