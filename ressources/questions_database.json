@@ -137,6 +137,13 @@
     "B":"type invariants",
     "C":"type predicates",
     "D":"all of these",
-    "Correct_Answer":"D"}
+    "Correct_Answer":"D"},
+
+  { "Q":"Which of the following is not an AdaCore core value ?",
+    "A":"Inventive",
+    "B":"Colorful",
+    "C":"Open",
+    "D":"Dependable",
+    "Correct_Answer":"B"}
 
 ]

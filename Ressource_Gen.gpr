@@ -1,0 +1,28 @@
+project Ressource_Gen is
+
+   for Languages use ("BMP", "Questions");
+   for Source_Dirs use ("ressources");
+   for Object_Dir use "generated";
+   for Objects_Linked ("BMP") use "false";
+   --  for Object_Generated ("BMP") use "false";
+
+   package Compiler is
+      for Driver ("BMP") use "bmp2ada";
+      for Object_File_Suffix ("BMP") use ".ads";
+      for Object_File_Switches ("BMP") use ("-o");
+      for Object_Path_Switches ("BMP") use ("-d");
+
+      for Driver ("Questions") use Ressource_Gen'Project_Dir &
+        "generate_question_database.py";
+      for Object_File_Suffix ("Questions") use ".adb";
+      for Object_File_Switches ("Questions") use ("-o");
+      for Object_Path_Switches ("Questions") use ("-d");
+
+   end Compiler;
+
+   package Naming is
+      for Body_Suffix ("BMP") use ".bmp";
+      for Body_Suffix ("Questions") use ".json";
+   end Naming;
+
+end Ressource_Gen;

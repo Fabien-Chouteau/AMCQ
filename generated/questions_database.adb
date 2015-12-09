@@ -4,11 +4,11 @@ with STM32F4.RNG.Polling;
 with Interfaces; use Interfaces;
 
 package body Questions_Database is
-   type Question_Id is mod 20;
+   type Question_Id is mod 21;
 
    procedure Set_New_Question (QW : in out Question_Window) is
       Index : constant Question_Id :=
-        Question_Id (STM32F4.RNG.Polling.Random mod 20);
+        Question_Id (STM32F4.RNG.Polling.Random mod 21);
    begin
       case Index is
       when 0 =>
@@ -171,6 +171,14 @@ package body Questions_Database is
             "type predicates",
             "all of these",
             Answer_D);
+      when 20 =>
+         QW.Set_Question
+           ("Which of the following is not an AdaCore core value ?",
+            "Inventive",
+            "Colorful",
+            "Open",
+            "Dependable",
+            Answer_B);
       end case;
    end Set_New_Question;
 

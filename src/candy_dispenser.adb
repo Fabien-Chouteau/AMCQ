@@ -7,6 +7,8 @@ with LED_Pulse;
 with STM32F429_Discovery;
 use STM32F429_Discovery;
 with STM32F4.SYSCFG; use STM32F4.SYSCFG;
+with Giza.GUI;
+with Giza.Events; use Giza.Events;
 
 package body Candy_Dispenser is
 
@@ -27,6 +29,7 @@ package body Candy_Dispenser is
       Enabled       : Boolean := False;
       Motor_Control : Motor_Pulse_Controller;
       LED_Control   : LED_Pulse.LED_Pulse_Controller (Red);
+      Redraw_Evt    : aliased Redraw_Event;
    end Sensor;
 
    ------------
@@ -69,7 +72,7 @@ package body Candy_Dispenser is
 
             --  Convert to start and stop time
             Start := Now   + Milliseconds (50);
-            Stop  := Start + Milliseconds (400);
+            Stop  := Start + Milliseconds (500);
 
             --  Send the pulse command
             Motor_Control.Pulse (Start, Stop);
@@ -77,6 +80,13 @@ package body Candy_Dispenser is
             --  Also start a LED pulse for a visual indication that the motor is
             --  on.
             LED_Control.Pulse (Start, Stop);
+
+            --  Pop take_candies_window
+            Giza.GUI.Pop;
+            --  And ask for redraw
+            Giza.GUI.Emit (Redraw_Evt'Access);
+
+            Enabled := False;
          end if;
       end Interrupt_Handler;
    end Sensor;

@@ -1,7 +1,5 @@
 with Giza.Windows;
 with Giza.Graphics; use Giza.Graphics;
-with Giza.Events; use Giza.Events;
-with Ada.Real_Time; use Ada.Real_Time;
 
 package Take_Candies_Windows is
 
@@ -20,17 +18,5 @@ package Take_Candies_Windows is
                    Ctx   : in out Context'Class;
                    Force : Boolean := False);
 private
-
-   type Repeat_Event is new Timer_Event with record
-      Win : Take_Candies_Window_Ref := null;
-   end record;
-
-   overriding
-   function Triggered (This : Repeat_Event) return Boolean;
-
-   type Take_Candies_Window is new Giza.Windows.Window with record
-      Cnt : Integer := 0;
-      Repeat_Time : Time_Span := Milliseconds (200);
-      Repeat_Evt  : aliased Repeat_Event;
-   end record;
+   type Take_Candies_Window is new Giza.Windows.Window with null record;
 end Take_Candies_Windows;

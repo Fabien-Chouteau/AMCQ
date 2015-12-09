@@ -1,7 +1,8 @@
-solenoid_engine
+main
 *.db
 *.ali
 *.o
 *.xml
 *.cgpr
 *.bexch
+*.TMP
