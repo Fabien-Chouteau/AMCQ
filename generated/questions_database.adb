@@ -4,11 +4,11 @@ with STM32F4.RNG.Polling;
 with Interfaces; use Interfaces;
 
 package body Questions_Database is
-   type Question_Id is mod 21;
+   type Question_Id is mod 20;
 
    procedure Set_New_Question (QW : in out Question_Window) is
       Index : constant Question_Id :=
-        Question_Id (STM32F4.RNG.Polling.Random mod 21);
+        Question_Id (STM32F4.RNG.Polling.Random mod 20);
    begin
       case Index is
       when 0 =>
@@ -61,7 +61,7 @@ package body Questions_Database is
             Answer_D);
       when 6 =>
          QW.Set_Question
-           ("GNAT is an acronym for",
+           ("GNAT was an acronym for",
             "GNU NYU Ada Translator",
             "GNU New Ada Translator",
             "GNAT's Not A Translator",
@@ -125,21 +125,13 @@ package body Questions_Database is
             Answer_A);
       when 14 =>
          QW.Set_Question
-           ("I can has cheezburger?",
-            "NO",
-            "No",
-            "Yes",
-            "No",
-            Answer_C);
-      when 15 =>
-         QW.Set_Question
            ("Which of the following is not a static analysis tool?",
             "GNATtest",
             "GNATcheck",
             "CodePeer",
             "GNATprove",
             Answer_A);
-      when 16 =>
+      when 15 =>
          QW.Set_Question
            ("What is GNAT Tracker?",
             "A pet tagging device",
@@ -147,7 +139,7 @@ package body Questions_Database is
             "A spying plugin in GPS",
             "AdaCore customers' best friend",
             Answer_D);
-      when 17 =>
+      when 16 =>
          QW.Set_Question
            ("Which of the following qualities does not apply to SPARK?",
             "automatic",
@@ -155,7 +147,7 @@ package body Questions_Database is
             "integrated",
             "interactive",
             Answer_B);
-      when 18 =>
+      when 17 =>
          QW.Set_Question
            ("Ada has all of these except",
             "flavors",
@@ -163,7 +155,7 @@ package body Questions_Database is
             "attributes",
             "versions",
             Answer_A);
-      when 19 =>
+      when 18 =>
          QW.Set_Question
            ("Ada 2012 contracts are",
             "preconditions and postconditions",
@@ -171,7 +163,7 @@ package body Questions_Database is
             "type predicates",
             "all of these",
             Answer_D);
-      when 20 =>
+      when 19 =>
          QW.Set_Question
            ("Which of the following is not an AdaCore core value ?",
             "Inventive",

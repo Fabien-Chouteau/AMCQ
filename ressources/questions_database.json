@@ -41,7 +41,7 @@
     "D":"1987",
     "Correct_Answer":"D"},
 
-  { "Q":"GNAT is an acronym for",
+  { "Q":"GNAT was an acronym for",
     "A":"GNU NYU Ada Translator",
     "B":"GNU New Ada Translator",
     "C":"GNAT's Not A Translator",
@@ -96,13 +96,6 @@
     "C":"No",
     "D":"No",
     "Correct_Answer":"A"},
-
-  { "Q":"I can has cheezburger?",
-    "A":"NO",
-    "B":"No",
-    "C":"Yes",
-    "D":"No",
-    "Correct_Answer":"C"},
 
   { "Q":"Which of the following is not a static analysis tool?",
     "A":"GNATtest",
