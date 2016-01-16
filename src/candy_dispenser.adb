@@ -1,19 +1,19 @@
 with Ada.Interrupts.Names;
 with Ada.Real_Time; use Ada.Real_Time;
-with STM32F4;       use STM32F4;
-with STM32F4.GPIO;  use STM32F4.GPIO;
+with STM32;       use STM32;
+with STM32.GPIO;  use STM32.GPIO;
 with Motor_Pulse; use Motor_Pulse;
 with LED_Pulse;
-with STM32F429_Discovery;
-use STM32F429_Discovery;
-with STM32F4.SYSCFG; use STM32F4.SYSCFG;
+with STM32.Board; use STM32.Board;
+with STM32.Device; use STM32.Device;
+with STM32.SYSCFG; use STM32.SYSCFG;
 with Giza.GUI;
 with Giza.Events; use Giza.Events;
+with STM32.EXTI; use STM32.EXTI;
 
 package body Candy_Dispenser is
-
-   Sensor_Port : GPIO_Port renames STM32F429_Discovery.GPIO_A;
-   Sensor_Pin  : constant GPIO_Pin  := Pin_0;
+   Sensor_Port : GPIO_Port renames STM32.Device.GPIO_A;
+   Sensor_Pin  : constant GPIO_Pin  := Pin_2; --  D5 on the STM32F469-disco
 
    protected Sensor is
       pragma Interrupt_Priority;
@@ -24,11 +24,11 @@ package body Candy_Dispenser is
       procedure Interrupt_Handler;
       pragma Attach_Handler
          (Interrupt_Handler,
-          Ada.Interrupts.Names.EXTI0_Interrupt);
+          Ada.Interrupts.Names.EXTI2_Interrupt);
 
       Enabled       : Boolean := False;
       Motor_Control : Motor_Pulse_Controller;
-      LED_Control   : LED_Pulse.LED_Pulse_Controller (Red);
+      LED_Control   : LED_Pulse.LED_Pulse_Controller (LED_Pulse.Red);
       Redraw_Evt    : aliased Redraw_Event;
    end Sensor;
 
@@ -116,10 +116,10 @@ package body Candy_Dispenser is
    procedure Initialize is
       Config : GPIO_Port_Configuration;
    begin
-      STM32F429_Discovery.Initialize_LEDs;
+      STM32.Board.Initialize_LEDs;
       Motor_Pulse.Initialize;
 
-      STM32F429_Discovery.Enable_Clock (Sensor_Port);
+      STM32.Device.Enable_Clock (Sensor_Port);
 
       Config.Mode := Mode_In;
       Config.Speed := Speed_100MHz;

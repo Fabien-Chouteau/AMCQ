@@ -1,9 +1,9 @@
-with Ada.Real_Time;
+with Ada.Real_Time; use Ada.Real_Time;
 
-with STM32F4.RCC; use STM32F4.RCC;
+--  with STM32F4.RCC; use STM32F4.RCC;
 with GUI;
 with Candy_Dispenser;
-with STM32F4.RNG.Polling;
+with STM32.RNG.Polling;
 
 pragma Warnings (Off);
 with Last_Chance_Handler;
@@ -13,14 +13,17 @@ with Interfaces;
 procedure Main is
    Unused : Interfaces.Unsigned_32;
 begin
-   STM32F4.RNG.Polling.Initialize_RNG;
+   STM32.RNG.Polling.Initialize_RNG;
 
    for Index in 1 .. 10 loop
-      Unused := STM32F4.RNG.Polling.Random;
+      Unused := STM32.RNG.Polling.Random;
    end loop;
 
    Candy_Dispenser.Initialize;
    GUI.Initialize;
+
+   delay until Clock + Seconds (1);
+
    GUI.Start;
 
    --  The controller is all interrupt driven, we can set this task to sleep

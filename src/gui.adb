@@ -1,62 +1,53 @@
-with Screen_Interface; use Screen_Interface;
 with LCD_Graphic_Backend;
-with Giza.Colors;
 with Giza.GUI;
 with Giza.Graphics;
-with STM32F4; use STM32F4;
 with Hershey_Fonts.Rowmand;
 with Ada.Synchronous_Task_Control;
+with Question_Windows;
+with STM32.RNG.Polling;
 with System;
 with Giza.Events; use Giza.Events;
 with Ada.Real_Time; use Ada.Real_Time;
-with Question_Windows;
-with STM32F4.RNG.Polling;
+with STM32.Touch_Panel;
+
 
 package body GUI is
 
-   function As_Color (R, G, B : Giza.Colors.RGB_Component)
-                      return Screen_Interface.Color;
-
-   procedure Set_Pixel_Paysage (A, B : Natural; Col : Color);
-
-      package LCD_Backend is new LCD_Graphic_Backend
-     (Color => Screen_Interface.Color,
-      Width => Screen_Interface.Height,
-      Height => Screen_Interface.Width,
-      Set_Pixel => Set_Pixel_Paysage,
-      As_Color => As_Color);
-
-   Backend : aliased LCD_Backend.LCD_Backend;
+   Backend : aliased LCD_Graphic_Backend.LCD_Backend;
    Context : aliased Giza.Graphics.Context;
    Main_W  : aliased Question_Windows.Question_Window;
 
    Sync : Ada.Synchronous_Task_Control.Suspension_Object;
 
-   ---------------
-   -- Set_Pixel --
-   ---------------
+   type Touch_State is record
+      Touch_Detected : Boolean;
+      X : Natural;
+      Y : Natural;
+   end record;
 
-   procedure Set_Pixel_Paysage (A, B : Natural; Col : Color) is
+   function Current_Touch_State return Touch_State;
+
+   -------------------------
+   -- Current_Touch_State --
+   -------------------------
+
+   function Current_Touch_State return Touch_State is
+      TS    : Touch_State;
+      ST_TS : constant STM32.Touch_Panel.TP_State :=
+                STM32.Touch_Panel.Get_State;
    begin
-        Screen_Interface.Set_Pixel (Width'Last - B, A, Col);
-   end Set_Pixel_Paysage;
+      TS.Touch_Detected := ST_TS'Length > 0;
 
-   --------------
-   -- As_Color --
-   --------------
+      if TS.Touch_Detected then
+         TS.X := ST_TS (1).X;
+         TS.Y := ST_TS (1).Y;
+      else
+         TS.X := 0;
+         TS.Y := 0;
+      end if;
 
-   function As_Color (R, G, B : Giza.Colors.RGB_Component)
-                      return Screen_Interface.Color
-   is
-      RF : constant Float := (Float (R) / 255.0) * 31.0;
-      GF : constant Float := (Float (G) / 255.0) * 31.0;
-      BF : constant Float := (Float (B) / 255.0) * 31.0;
-   begin
-      return 16#8000# or
-        (Screen_Interface.Color (RF) * (2**10))
-        or (Screen_Interface.Color (GF) * (2**5))
-        or Screen_Interface.Color (BF);
-   end As_Color;
+      return TS;
+   end Current_Touch_State;
 
    task Touch_Screen is
       pragma Priority (System.Default_Priority - 1);
@@ -78,8 +69,8 @@ package body GUI is
          if TS.Touch_Detected /= Prev.Touch_Detected then
 
             if TS.Touch_Detected then
-               Click_Evt.Pos.X := TS.Y;
-               Click_Evt.Pos.Y := Screen_Interface.Width'Last - TS.X;
+               Click_Evt.Pos.X := TS.X;
+               Click_Evt.Pos.Y := TS.Y;
                Giza.GUI.Emit (Event_Not_Null_Ref (Click_Evt));
             else
                Giza.GUI.Emit (Event_Not_Null_Ref (Release_Evt));
@@ -96,9 +87,9 @@ package body GUI is
 
    procedure Initialize is
    begin
-      Screen_Interface.Initialize;
+      LCD_Graphic_Backend.Initialize;
       Giza.GUI.Set_Backend (Backend'Access);
-
+      STM32.Touch_Panel.Initialize;
       Context.Set_Font (Hershey_Fonts.Rowmand.Font);
       Giza.GUI.Set_Context (Context'Access);
    end Initialize;
@@ -125,7 +116,7 @@ package body GUI is
       Ret : Unsigned_32;
    begin
       loop
-         Ret := STM32F4.RNG.Polling.Random;
+         Ret := STM32.RNG.Polling.Random;
          exit when Ret <= Rand_Linit;
       end loop;
       return Ret mod Modulo;

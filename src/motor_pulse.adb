@@ -1,11 +1,11 @@
-with STM32F4;       use STM32F4;
-with STM32F4.GPIO;  use STM32F4.GPIO;
-with STM32F429_Discovery;
+with STM32;       use STM32;
+with STM32.GPIO;  use STM32.GPIO;
+with STM32.Device;
 
 package body Motor_Pulse is
 
-   Motor_Port : GPIO_Port renames STM32F429_Discovery.GPIO_E;
-   Motor_Pin  : constant GPIO_Pin := Pin_6;
+   Motor_Port : GPIO_Port renames STM32.Device.GPIO_G;
+   Motor_Pin  : constant GPIO_Pin := Pin_10;  --  D8 on the STM32F469-disco
 
    ----------------
    -- Initialize --
@@ -15,7 +15,7 @@ package body Motor_Pulse is
       Config : GPIO_Port_Configuration;
    begin
 
-      STM32F429_Discovery.Enable_Clock (Motor_Port);
+      STM32.Device.Enable_Clock (Motor_Port);
 
       Config.Mode := Mode_Out;
       Config.Speed := Speed_100MHz;
