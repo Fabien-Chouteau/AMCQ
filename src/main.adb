@@ -22,8 +22,6 @@ begin
    Candy_Dispenser.Initialize;
    GUI.Initialize;
 
-   delay until Clock + Seconds (1);
-
    GUI.Start;
 
    --  The controller is all interrupt driven, we can set this task to sleep

@@ -72,7 +72,7 @@ package body Candy_Dispenser is
 
             --  Convert to start and stop time
             Start := Now   + Milliseconds (50);
-            Stop  := Start + Milliseconds (500);
+            Stop  := Start + Milliseconds (600);
 
             --  Send the pulse command
             Motor_Control.Pulse (Start, Stop);
@@ -117,6 +117,8 @@ package body Candy_Dispenser is
       Config : GPIO_Port_Configuration;
    begin
       STM32.Board.Initialize_LEDs;
+      STM32.Board.All_LEDs_Off;
+
       Motor_Pulse.Initialize;
 
       STM32.Device.Enable_Clock (Sensor_Port);
