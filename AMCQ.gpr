@@ -1,5 +1,6 @@
 with "Giza/Giza";
 with "drivers/ARM/STMicro/STM32/stm32.gpr";
+with "Giza/test/Giza_Test.gpr";
 
 project AMCQ is
 

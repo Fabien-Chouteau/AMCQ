@@ -1,9 +1,10 @@
 with Giza.Colors; use Giza.Colors;
 with Giza.GUI;
-with hand;
+with Candy_Dispenser_Img;
 with Candy_Dispenser;
 with Giza.Timers;
 with STM32.GPIO; use STM32.GPIO;
+with Giza.Bitmap_Fonts.FreeSerifItalic32pt7b;
 
 package body Take_Candies_Windows is
 
@@ -64,20 +65,19 @@ package body Take_Candies_Windows is
       Ctx   : in out Context'Class;
       Force : Boolean := False)
    is
-      Text_Box : constant Rect_T :=
-        ((200, 10), (400, 200));
-      Text_Box_2 : constant Rect_T :=
-        ((200, 90), (400, 200));
+      Text_Box : constant Rect_T := Ctx.Bounds;
    begin
       if Force then
+         Ctx.Save;
          Ctx.Set_Color (White);
          Ctx.Fill_Rectangle (Ctx.Bounds);
          Ctx.Set_Color (Black);
-         Ctx.Print_In_Rect ("Take your", Text_Box);
-         Ctx.Print_In_Rect ("candies!", Text_Box_2);
+         Ctx.Set_Font (Giza.Bitmap_Fonts.FreeSerifItalic32pt7b.Font);
+         Ctx.Print_In_Rect ("Take your" & ASCII.LF & "candies!", Text_Box);
 
-         Ctx.Copy_Bitmap (hand.Data,
-                          (0, This.Get_Size.H - hand.Data.H));
+         Ctx.Copy_Bitmap (Candy_Dispenser_Img.Data,
+                          (0, This.Get_Size.H - Candy_Dispenser_Img.Data.H));
+         Ctx.Restore;
       end if;
       Draw (Parent (This), Ctx, Force);
    end Draw;

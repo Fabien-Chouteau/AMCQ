@@ -1,7 +1,7 @@
 with LCD_Graphic_Backend;
 with Giza.GUI;
 with Giza.Graphics;
-with Hershey_Fonts.Rowmand;
+with Giza.Bitmap_Fonts.FreeSerifItalic18pt7b;
 with Ada.Synchronous_Task_Control;
 with Question_Windows;
 with STM32.RNG.Polling;
@@ -9,13 +9,16 @@ with System;
 with Giza.Events; use Giza.Events;
 with Ada.Real_Time; use Ada.Real_Time;
 with STM32.Touch_Panel;
-
+with STM32.GPIO; use STM32.GPIO;
+with STM32.Board;
+with Test_Main_Window;
 
 package body GUI is
 
    Backend : aliased LCD_Graphic_Backend.LCD_Backend;
    Context : aliased Giza.Graphics.Context;
    Main_W  : aliased Question_Windows.Question_Window;
+   Main_W_2  : aliased Test_Main_Window.Main_Window;
 
    Sync : Ada.Synchronous_Task_Control.Suspension_Object;
 
@@ -90,7 +93,7 @@ package body GUI is
       LCD_Graphic_Backend.Initialize;
       Giza.GUI.Set_Backend (Backend'Access);
       STM32.Touch_Panel.Initialize;
-      Context.Set_Font (Hershey_Fonts.Rowmand.Font);
+      Context.Set_Font (Giza.Bitmap_Fonts.FreeSerifItalic18pt7b.Font);
       Giza.GUI.Set_Context (Context'Access);
    end Initialize;
 
@@ -100,7 +103,14 @@ package body GUI is
 
    procedure Start is
    begin
-      Giza.GUI.Push (Main_W'Access);
+      STM32.Board.Configure_User_Button_GPIO;
+
+      --  Show the Giza Test window if the used button is pressed at init
+      if Set (STM32.Board.User_Button_Point) then
+         Giza.GUI.Push (Main_W_2'Access);
+      else
+         Giza.GUI.Push (Main_W'Access);
+      end if;
 
       Ada.Synchronous_Task_Control.Set_True (Sync);
       Giza.GUI.Event_Loop;

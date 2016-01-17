@@ -1,7 +1,8 @@
-with Giza.Graphics; use Giza.Graphics;
 with Giza.Colors;
 with STM32;
 with STM32.DMA2D;
+with Giza.Backends; use Giza.Backends;
+with Giza.Types; use Giza.Types;
 
 -------------------------
 -- LCD_Graphic_Backend --

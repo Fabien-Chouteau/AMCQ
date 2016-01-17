@@ -4,6 +4,7 @@ with Giza.Widgets.Button; use Giza.Widgets.Button;
 with Giza.Events; use Giza.Events;
 with STM32.Board; use STM32.Board;
 with Ada.Real_Time; use Ada.Real_Time;
+with Giza.Types; use Giza.Types;
 
 package Take_Candies_Windows is
 
