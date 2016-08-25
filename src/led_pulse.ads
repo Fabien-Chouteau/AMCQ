@@ -14,7 +14,4 @@ package LED_Pulse is
    overriding
    procedure Stop (Self : in out LED_Pulse_Controller);
 
-   procedure Example with No_Return;
-   --  Runs an example of pulse controller with LEDs
-
 end LED_Pulse;

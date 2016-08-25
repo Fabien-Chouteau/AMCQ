@@ -1,6 +1,6 @@
 with Giza.Colors;
-with STM32;
-with STM32.DMA2D;
+with HAL;
+with HAL.Bitmap;
 with Giza.Backends; use Giza.Backends;
 with Giza.Types; use Giza.Types;
 
@@ -38,7 +38,6 @@ package LCD_Graphic_Backend is
 
 private
    type LCD_Backend is new Backend with record
-      Raw_Color : STM32.Word;
-      RGB_Color : STM32.DMA2D.DMA2D_Color;
+      RGB_Color : HAL.Bitmap.Bitmap_Color;
    end record;
 end LCD_Graphic_Backend;

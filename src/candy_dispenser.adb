@@ -6,14 +6,14 @@ with Motor_Pulse; use Motor_Pulse;
 with LED_Pulse;
 with STM32.Board; use STM32.Board;
 with STM32.Device; use STM32.Device;
-with STM32.SYSCFG; use STM32.SYSCFG;
 with Giza.GUI;
 with Giza.Events; use Giza.Events;
 with STM32.EXTI; use STM32.EXTI;
 
 package body Candy_Dispenser is
-   Sensor_Port : GPIO_Port renames STM32.Device.GPIO_A;
-   Sensor_Pin  : constant GPIO_Pin  := Pin_2; --  D5 on the STM32F469-disco
+   Sensor_Pin : GPIO_Point renames PA2; --  D5 on the STM32F469-disco
+   EXTI_Line : constant External_Line_Number :=
+     Sensor_Pin.Get_Interrupt_Line_Number;
 
    protected Sensor is
       pragma Interrupt_Priority;
@@ -64,7 +64,7 @@ package body Candy_Dispenser is
          Start, Stop : Time;
          Now : Ada.Real_Time.Time := Ada.Real_Time.Time_First;
       begin
-         Clear_External_Interrupt (Sensor_Pin);
+         Clear_External_Interrupt (EXTI_Line);
 
          if Enabled then
             --  What time is it?
@@ -114,23 +114,22 @@ package body Candy_Dispenser is
    ----------------
 
    procedure Initialize is
-      Config : GPIO_Port_Configuration;
    begin
       STM32.Board.Initialize_LEDs;
       STM32.Board.All_LEDs_Off;
 
       Motor_Pulse.Initialize;
 
-      STM32.Device.Enable_Clock (Sensor_Port);
+      Enable_Clock (Sensor_Pin);
 
-      Config.Mode := Mode_In;
-      Config.Speed := Speed_100MHz;
-      Config.Resistors := Floating;
+      Sensor_Pin.Configure_IO
+        ((Mode        => Mode_In,
+          Output_Type => Open_Drain,
+          Speed       => Speed_50MHz,
+          Resistors   => Floating));
 
-      Configure_IO (Sensor_Port, Sensor_Pin, Config);
-
-      Connect_External_Interrupt (Sensor_Port, Sensor_Pin);
-      Configure_Trigger (Sensor_Port, Sensor_Pin, Interrupt_Rising_Edge);
+      --  Connect the button's pin to the External Interrupt Handler
+      Sensor_Pin.Configure_Trigger (Interrupt_Rising_Edge);
    end Initialize;
 
 end Candy_Dispenser;

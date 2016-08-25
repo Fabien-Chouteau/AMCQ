@@ -5,9 +5,6 @@ with GUI;
 with Candy_Dispenser;
 with STM32.RNG.Polling;
 
-pragma Warnings (Off);
-with Last_Chance_Handler;
-pragma Warnings (On);
 with Interfaces;
 
 procedure Main is

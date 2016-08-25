@@ -8,9 +8,9 @@ with STM32.RNG.Polling;
 with System;
 with Giza.Events; use Giza.Events;
 with Ada.Real_Time; use Ada.Real_Time;
-with STM32.Touch_Panel;
 with STM32.GPIO; use STM32.GPIO;
 with STM32.Board;
+with HAL.Touch_Panel; use HAL.Touch_Panel;
 with Test_Main_Window;
 
 package body GUI is
@@ -36,8 +36,8 @@ package body GUI is
 
    function Current_Touch_State return Touch_State is
       TS    : Touch_State;
-      ST_TS : constant STM32.Touch_Panel.TP_State :=
-                STM32.Touch_Panel.Get_State;
+      ST_TS : constant HAL.Touch_Panel.TP_State :=
+                STM32.Board.Touch_Panel.Get_All_Touch_Points;
    begin
       TS.Touch_Detected := ST_TS'Length > 0;
 
@@ -80,7 +80,7 @@ package body GUI is
             end if;
          end if;
          Prev := TS;
-         delay until Clock + Milliseconds (50);
+         delay until Clock + Milliseconds (10);
       end loop;
    end Touch_Screen;
 
@@ -92,7 +92,7 @@ package body GUI is
    begin
       LCD_Graphic_Backend.Initialize;
       Giza.GUI.Set_Backend (Backend'Access);
-      STM32.Touch_Panel.Initialize;
+      STM32.Board.Touch_Panel.Initialize;
       Context.Set_Font (Giza.Bitmap_Fonts.FreeSerifItalic18pt7b.Font);
       Giza.GUI.Set_Context (Context'Access);
    end Initialize;
