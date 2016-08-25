@@ -93,6 +93,7 @@ package body Take_Candies_Windows is
    is
    begin
       if On_Position_Event (Parent (This), Evt, Pos) then
+         Candy_Dispenser.Disable_Dispenser;
          Giza.GUI.Pop;
          return True;
       else
